@@ -1,9 +1,8 @@
-with import <nixpkgs> {};
+{ pkgs ? import <nixpkgs> {} }: with pkgs;
 
-pkgs.mkShell {
+mkShell {
   buildInputs = [
     python310Packages.django
     python310Packages.djangorestframework
-    python310Packages.channels-redis
   ];
 }
