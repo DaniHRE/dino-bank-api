@@ -13,6 +13,30 @@ class RegisterAPIView(APIView):
         serializer.save()
         return Response(serializer.data)
 
+class LoginAPIView(APIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+    def post(self, request):
+        user = CustomUser.objects.filter(email=request.data['email']).first()
+
+        if not user:
+            raise APIException('Invalid credentials!')
+
+        if not user.check_password(request.data['password']):
+            raise APIException('Invalid credentials!')
+
+        access_token = create_access_token(user.id)
+        refresh_token = create_refresh_token(user.id)
+
+        response = Response()
+
+        response.set_cookie(key='refreshToken', value=refresh_token, httponly=True)
+        response.data = {
+            'token': access_token
+        }
+
+        return response
 # CREATE NEW USER VIA API
 
 class CreateCustomUser(generics.CreateAPIView):
