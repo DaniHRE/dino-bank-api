@@ -3,6 +3,14 @@ from .serializers import CustomUserSerializer
 from rest_framework import generics
 from rest_framework import permissions
 
+from rest_framework.authentication import get_authorization_header
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.exceptions import APIException, AuthenticationFailed
+
+from .authentication import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
+
+
 class RegisterAPIView(APIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
@@ -12,6 +20,7 @@ class RegisterAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
 
 class LoginAPIView(APIView):
     queryset = CustomUser.objects.all()
@@ -37,6 +46,8 @@ class LoginAPIView(APIView):
         }
 
         return response
+
+
 class UserAPIView(APIView):
     def get(self, request):
         auth = get_authorization_header(request).split()
@@ -50,6 +61,8 @@ class UserAPIView(APIView):
             return Response(CustomUserSerializer(user).data)
 
         raise AuthenticationFailed('unauthenticated')
+
+
 class RefreshAPIView(APIView):
     def post(self, request):
         refresh_token = request.COOKIES.get('refreshToken')
@@ -58,6 +71,20 @@ class RefreshAPIView(APIView):
         return Response({
             'token': access_token
         })
+
+
+class LogoutAPIView(APIView):
+    def post(self, _):
+        response = Response()
+        response.delete_cookie(key="refreshToken")
+        response.data = {
+            'message': 'success'
+        }
+        return response
+
+
+
+
 # CREATE NEW USER VIA API
 
 class CreateCustomUser(generics.CreateAPIView):
