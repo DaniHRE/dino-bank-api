@@ -47,14 +47,12 @@ urlpatterns = [
 
     # API ENDPOINT TO SHOW ACCOUNT DETAILS FOR LOGGED-IN USER USING BANKACCOUNT SERIALIZER
     path('viewbankaccountuser/', bv.ViewBankAccountUser.as_view()),
-    
+
     # CSV DOWNLOAD
     path('downloadbankaccounts/', bv.downloadBankAccounts),
 
-
-    
     # DRF AUTH
-    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include('accounts.urls')),
 
     # DRF DOCS
     path('docs/', TemplateView.as_view(
