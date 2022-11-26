@@ -37,6 +37,19 @@ class LoginAPIView(APIView):
         }
 
         return response
+class UserAPIView(APIView):
+    def get(self, request):
+        auth = get_authorization_header(request).split()
+
+        if auth and len(auth) == 2:
+            token = auth[1].decode('utf-8')
+            id = decode_access_token(token)
+
+            user = CustomUser.objects.filter(pk=id).first()
+
+            return Response(CustomUserSerializer(user).data)
+
+        raise AuthenticationFailed('unauthenticated')
 # CREATE NEW USER VIA API
 
 class CreateCustomUser(generics.CreateAPIView):
