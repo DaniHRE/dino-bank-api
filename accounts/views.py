@@ -3,6 +3,15 @@ from .serializers import CustomUserSerializer
 from rest_framework import generics
 from rest_framework import permissions
 
+class RegisterAPIView(APIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+    def post(self, request):
+        serializer = CustomUserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 # CREATE NEW USER VIA API
 
