@@ -49,30 +49,25 @@ class LoginAPIView(APIView):
         return response
 
 
-class UserAPIView(APIView):
-    def get(self, request):
-        auth = get_authorization_header(request).split()
-
-        if auth and len(auth) == 2:
-            token = auth[1].decode('utf-8')
-            id = decode_access_token(token)
-
-            user = CustomUser.objects.filter(pk=id).first()
-
-            return Response(CustomUserSerializer(user).data)
-
-        raise AuthenticationFailed('unauthenticated')
-
-
 class RefreshAPIView(APIView):
     def post(self, request):
         refresh_token = request.COOKIES.get('refreshToken')
         id = decode_refresh_token(refresh_token)
         access_token = create_access_token(id)
-        return Response({
-            'token': access_token
-        })
+        return access_token
+        # return Response({
+        #     'token': access_token
+        # })
 
+class UserAPIView(APIView):
+    def get(self, request):
+        token = RefreshAPIView.post(self, request)
+
+        if token:
+            id = decode_access_token(token)
+            user = CustomUser.objects.filter(pk=id).first()
+            return Response(CustomUserSerializer(user).data)
+        raise AuthenticationFailed('unauthenticated')
 
 class LogoutAPIView(APIView):
     def post(self, _):
