@@ -4,11 +4,10 @@ from banking.serializers import BankAccountSerializer, TransactionSerializer
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    
+
     bankaccount = BankAccountSerializer(many=True, read_only=True, )
     transactions = TransactionSerializer(many=True, read_only=True, )
 
-    
     class Meta:
         model = CustomUser
         fields = ['id', 'first_name', 'last_name', 'email', 'password', 'bankaccount', 'transactions' ]

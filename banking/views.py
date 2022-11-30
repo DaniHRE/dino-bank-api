@@ -29,7 +29,7 @@ class CreateBankAccountAPI(generics.CreateAPIView):
     
     def post(self, request, format=None):
         serializer = BankAccountSerializer(data=request.data)
-                
+
         if serializer.is_valid():
             account_type = serializer.validated_data['account_type']
             if account_type == 'savings':

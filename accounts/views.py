@@ -54,14 +54,19 @@ class RefreshAPIView(APIView):
         refresh_token = request.COOKIES.get('refreshToken')
         id = decode_refresh_token(refresh_token)
         access_token = create_access_token(id)
-        return access_token
-        # return Response({
-        #     'token': access_token
-        # })
+        # return access_token
+        return Response({
+            'token': access_token
+        })
 
 class UserAPIView(APIView):
     def get(self, request):
-        token = RefreshAPIView.post(self, request)
+        def getToken(request):
+            refresh_token = request.COOKIES.get('refreshToken')
+            id = decode_refresh_token(refresh_token)
+            access_token = create_access_token(id)
+            return access_token
+        token = getToken(request)
 
         if token:
             id = decode_access_token(token)
