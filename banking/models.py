@@ -9,10 +9,7 @@ from django.conf import settings
 
 
 class BankAccount(models.Model):
-    account_type = (
-        ('savings', 'Savings'),
-        ('credit', 'Credit'),
-    )
+    account_type = ('savings', 'credit'),
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='bankaccount', on_delete=models.CASCADE, )
     account_type = models.CharField(max_length=20, choices=account_type, db_index=True )

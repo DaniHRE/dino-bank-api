@@ -91,7 +91,7 @@ class CreateTransactionAPI(generics.CreateAPIView):
    
     serializer_class = TransactionSerializer
     # permission_classes = [permissions.IsAdminUser]        UNCOMMENT IF REQUIRED FOR ADMIN USERS ONLY
-    
+
     def post(self, request, format=None):
         serializer = TransactionSerializer(data=request.data)
 
@@ -170,7 +170,7 @@ class ViewBankAccountUser(generics.ListAPIView):
     '''
     serializer_class = BankAccountSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+
     def get_queryset(self):
         logged_in_user = self.request.user     # FOR LOGGED IN USERS      
         queryset = logged_in_user.bankaccount.all()
