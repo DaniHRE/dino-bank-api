@@ -101,7 +101,7 @@ class CreateTransactionAPI(generics.CreateAPIView):
             transaction_type = serializer.validated_data['transaction_type']
             transaction_amount = serializer.validated_data['transaction_amount']
             bank_account = BankAccount.objects.get(id=account_type.pk, user_id=user_id)
-                        
+
             if bank_account:   # CONFIRM IF THIS ACCOUNT EXISTS BEFORE MAKING ANY CHANGES
                 if transaction_type == 'deposit':
                     bank_account.account_balance = F('account_balance') + transaction_amount

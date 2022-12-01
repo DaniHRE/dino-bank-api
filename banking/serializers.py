@@ -5,7 +5,7 @@ from .models import BankAccount, Transactions
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    
+
     user = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(),many=False,)
     account_type = serializers.PrimaryKeyRelatedField(queryset=BankAccount.objects.all(),many=False,)
 

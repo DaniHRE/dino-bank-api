@@ -9,7 +9,10 @@ from django.conf import settings
 
 
 class BankAccount(models.Model):
-    account_type = ('savings', 'credit'),
+    account_type = (
+        ('1', 'savings'), 
+        ('2', 'credit'),
+    )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='bankaccount', on_delete=models.CASCADE, )
     account_type = models.CharField(max_length=20, choices=account_type, db_index=True )
@@ -29,10 +32,10 @@ class BankAccount(models.Model):
 
 class Transactions(models.Model):
 
-    transaction_type = (
-        ('deposit', 'withdraw'),)
+    transaction_type = ('deposit', 'withdraw'),
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='transactions', on_delete=models.CASCADE, )
+    # user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='transactions', on_delete=models.CASCADE, )
+    email = models.TextField(max_length=100)
     account_type = models.ForeignKey(BankAccount, related_name='accounttransactions', to_field='id', on_delete=models.CASCADE,)
     transaction_type = models.CharField(max_length=20, choices=transaction_type)
     transaction_amount = models.FloatField()
