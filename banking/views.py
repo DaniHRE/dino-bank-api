@@ -109,7 +109,7 @@ class CreateTransactionAPI(generics.CreateAPIView):
                     serializer.save()
                     return Response(status=status.HTTP_201_CREATED)
                     
-                elif transaction_type == 'withdrawal':
+                elif transaction_type == 'withdraw':
                     if bank_account.account_type == 'savings':
                         if bank_account.account_balance > 50 and bank_account.account_balance > transaction_amount:
                             new_savings_balance = bank_account.account_balance - transaction_amount 

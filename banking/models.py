@@ -30,8 +30,7 @@ class BankAccount(models.Model):
 class Transactions(models.Model):
 
     transaction_type = (
-        ('deposit', 'Deposit'),
-        ('withdrawal', 'Withdrawal'),)
+        ('deposit', 'withdraw'),)
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='transactions', on_delete=models.CASCADE, )
     account_type = models.ForeignKey(BankAccount, related_name='accounttransactions', to_field='id', on_delete=models.CASCADE,)
