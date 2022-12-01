@@ -1,8 +1,10 @@
+import json
 from rest_framework import generics
 from .serializers import BankAccountSerializer, TransactionSerializer
 from rest_framework import permissions
 from rest_framework.response import Response
 from django.http import Http404
+from django.core import serializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -88,12 +90,19 @@ class CreateTransactionAPI(generics.CreateAPIView):
     curl --data "transaction_type=deposit&transaction_amount=10000&account_type=6&user=1" http://127.0.0.1:8000/createtransactionapi/
     curl --data "transaction_type=withdrawal&transaction_amount=500&account_type=6&user=1" http://127.0.0.1:8000/createtransactionapi/
     '''
-   
+
     serializer_class = TransactionSerializer
     # permission_classes = [permissions.IsAdminUser]        UNCOMMENT IF REQUIRED FOR ADMIN USERS ONLY
 
     def post(self, request, format=None):
-        serializer = TransactionSerializer(data=request.data)
+        request_data = request.data
+        user_email = request_data.get('user')
+        user_relative = CustomUser.objects.filter(email=user_email)
+        qs = serializers.serialize('json', user_relative)
+        parserqs = json.loads(qs)
+        request_data.update({"user": parserqs[0]['pk']})
+
+        serializer = TransactionSerializer(data=request_data)
 
         if serializer.is_valid():
             user_id = serializer.validated_data['user']
