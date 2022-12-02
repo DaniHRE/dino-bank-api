@@ -32,7 +32,10 @@ class BankAccount(models.Model):
 
 class Transactions(models.Model):
 
-    transaction_type = ('deposit', 'withdraw'),
+    transaction_type = (
+        ('deposit', 'Deposit'),
+        ('withdraw', 'Withdraw'),
+        )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='transactions', on_delete=models.CASCADE, )
     # email = models.TextField(max_length=100)

@@ -100,7 +100,8 @@ class CreateTransactionAPI(generics.CreateAPIView):
         user_relative = CustomUser.objects.filter(email=user_email)
         qs = serializers.serialize('json', user_relative)
         parserqs = json.loads(qs)
-        request_data.update({"user": parserqs[0]['pk']})
+        if request_data.update({"user": parserqs[0]['pk']}):
+            request_data.update({"user": parserqs[0]['pk']})
 
         serializer = TransactionSerializer(data=request_data)
 
